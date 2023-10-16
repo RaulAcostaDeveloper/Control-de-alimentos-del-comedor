@@ -6,8 +6,8 @@ import { MainAdmin } from './MainAdmin'
 import { MainEmpleado } from './MainEmpleado'
 
 export const Index = (): JSX.Element => {
-    const [ showLogin, setShowLogin ] = useState(false);
-    const [ isLoggedAdmin, setIsLoggedAdmin ] = useState(true);
+    const [ showLogin, setShowLogin ] = useState(true);
+    const [ isLoggedAdmin, setIsLoggedAdmin ] = useState(false);
     const handleLogin = (isAdmin: boolean) => {        
         setShowLogin(false);
         setIsLoggedAdmin(isAdmin);   
