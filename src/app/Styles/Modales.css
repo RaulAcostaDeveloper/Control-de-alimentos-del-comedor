@@ -1,0 +1,52 @@
+.containerModal{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.75);
+    .innerModal{
+        transition: 0.4s;
+        width: 320px;
+        height: auto;
+        background-color: aliceblue;
+        border-radius: 4px;
+        -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+        box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+        .titulo{
+            margin-bottom: 30px;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .texto{
+            text-align: center;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-top: 10px;
+        }
+        .input{
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .boton{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            .adminq {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+}

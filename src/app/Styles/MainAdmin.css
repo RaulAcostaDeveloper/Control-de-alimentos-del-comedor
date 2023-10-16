@@ -1,0 +1,16 @@
+.mainAdmin {
+    .contenedorBotonMostrar{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .listaEmpleados{
+        margin-top: 30px;
+        .filtro{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+    }
+}
