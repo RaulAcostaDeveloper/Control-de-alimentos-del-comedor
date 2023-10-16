@@ -100,10 +100,7 @@ type Props = {
     filter?: string;
 }
 export const EmpleadosList = ({ filter } :Props): JSX.Element => {
-    const [ empleadosLista, setEmpleadosLista ] = useState([{}]);
-    useEffect(()=>{
-        setEmpleadosLista(empleados);
-    },[]);
+    const [ empleadosLista, setEmpleadosLista ] = useState(empleados);
     useEffect(()=> {
         if (filter) {
             const arr = filtraPorNombre(filter);
