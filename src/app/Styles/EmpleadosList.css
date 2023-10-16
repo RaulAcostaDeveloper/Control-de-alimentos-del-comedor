@@ -19,6 +19,13 @@
         }
     }
 }
+.cuadroDeAcciones{
+    margin-left: 30px;
+    margin-bottom: 40px;
+    .boton-1{
+        margin-right: 20px;
+    }
+}
 @media only screen and (min-width: 762px) {
     .empleadosList{
         .tabla{

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import '../Styles/MainAdmin.css';
 import { EmpleadosList } from './EmpleadosList';
 export const MainAdmin = ({ openLogin } :Props): JSX.Element => {
-    const [ showList, setShowList ] = useState(false);
+    const [ showList, setShowList ] = useState(true);
     const [ filtroNombre, setFiltroNombre ] = useState('');
     return (
         <div className="mainAdmin">
