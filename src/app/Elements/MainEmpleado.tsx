@@ -87,9 +87,6 @@ export const MainEmpleado = ({ openLogin }: Props): JSX.Element => {
             default:
                 break;
         }
-        setTimeout(() => {
-            setShowModalEmpleado(false);
-        }, 4000);
     }
     return (
         <div className="mainEmpleado">
