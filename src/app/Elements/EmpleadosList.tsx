@@ -12,7 +12,6 @@ type Props = {
     filter?: string;
 }
 
-
 export const empleados: Empleado[] = [
     {
       Id_Empleado: "4256",
@@ -86,14 +85,29 @@ const filtraPorNombre = (filtro: string) => {
       return empleadosFiltrados;
 }
 const filtraPorId = (filtro: string) => {
-    const empleadosFiltrados = empleados.filter((empleado) => {
-        return empleado.Id_Empleado.toLowerCase().includes(filtro.toLowerCase());
-      });
-      return empleadosFiltrados;
+    let indice = 0;
+    const empleadosFiltrados = empleados.filter((empleado, index) => {
+        if (empleado.Id_Empleado.toLowerCase().includes(filtro.toLowerCase())) {
+            indice= index;
+            return true
+        }
+    });
+      
+    return {
+        empleadosFiltrados,
+        indice,
+    };
+}
+const eliminarEmpleado = (index:  number) =>  {
+    empleados.splice(index, 1);
 }
 export const EmpleadosList = ({ filter } :Props): JSX.Element => {
     const [ empleadosLista, setEmpleadosLista ] = useState(empleados);
     const [ showAniadirEmpleado, setShowAniadirEmpleado ] = useState(false);
+    const [ showEliminarEmpleado, setShowEliminarEmpleado ] = useState(false);
+    const [ idEliminar,  setIdEliminar ] = useState('');
+    const [ showAlertModal, setShowAlertModal] = useState(false);
+    const [ textAlertModal, setTextAlertModal ] = useState('');
 
     useEffect(()=> {
         if (filter) {
@@ -104,16 +118,33 @@ export const EmpleadosList = ({ filter } :Props): JSX.Element => {
         }
     },[filter]);
 
-
-
     const handleAniadirEmpleado = (newEmpleado: Empleado) => {
         const objFiltrado = filtraPorId(newEmpleado.Id_Empleado);
-        if (objFiltrado.length ===  0) {
+        if (objFiltrado.empleadosFiltrados.length ===  0) {
             aniadirEmpleado(newEmpleado);
             const obj = empleados.map((el)=>el);
             setEmpleadosLista(obj);
         } else {
-            console.log('Ya existe el empleado');
+            setShowAlertModal(true);
+            setTextAlertModal('Ya existe el empleado')
+        }
+    }
+
+    const handleEliminarEmpleado = () =>  {
+        if (idEliminar.length === 4) {
+            const empleadoAEliminar  =  filtraPorId(idEliminar);
+            console.log('empleadoAEliminar ',  empleadoAEliminar);
+            
+            if (empleadoAEliminar.empleadosFiltrados.length > 0) {
+                eliminarEmpleado(empleadoAEliminar.indice);
+                setIdEliminar('');
+                setShowEliminarEmpleado(false); 
+                setShowAlertModal(true);
+                setTextAlertModal('Se eliminó al empleado ' + empleadoAEliminar.empleadosFiltrados[0].nombre); 
+            }  else  {
+                setShowAlertModal(true);
+                setTextAlertModal('No se encontró el empleado con  el id ' + idEliminar);           
+            }
         }
     }
 
@@ -122,13 +153,50 @@ export const EmpleadosList = ({ filter } :Props): JSX.Element => {
             <div className='cuadroDeAcciones'>
                 <p>Acciones</p>
                 <button className="boton-1" onClick={ () => setShowAniadirEmpleado(true) }>Añadir empleado</button>
-                {/* <button className="boton-1" onClick={ () => setShowAniadirEmpleado(true) }>Eliminar empleado</button> */}
-
+                <button className="boton-1" onClick={ () => setShowEliminarEmpleado(true) }>Eliminar empleado</button>
             </div>
             { showAniadirEmpleado && 
                 <ModalAniadirEmpleado
                     setShowAniadirEmpleado = { setShowAniadirEmpleado }
                     handleAniadirEmpleado = { handleAniadirEmpleado }/>
+            }
+            { showEliminarEmpleado && 
+                <div className="containerModal">
+                    <div className="innerModal">
+                        <div className='titulo'> 
+                            <h3>Eliminar  empleado</h3>
+                        </div>
+                        <div className='input'>
+                            <input 
+                                type="text" 
+                                placeholder='Id_Empleado a eliminar' 
+                                className='input-1'
+                                autoComplete="off"
+                                minLength={4}
+                                maxLength={4}
+                                value={ idEliminar }
+                                onChange={ (event) => setIdEliminar(event.target.value) }/>
+                        </div>
+                        <div className='boton'>
+                            <button className='boton-1' onClick={ () => handleEliminarEmpleado() }>Aceptar</button>
+                        </div>
+                        <div className='boton'>
+                            <button className='boton-1' onClick={ () => setShowEliminarEmpleado(false) }>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            { showAlertModal && 
+                <div className="containerModal">
+                    <div className="innerModal">
+                        <div className='titulo'> 
+                            <h3>{textAlertModal}</h3>
+                        </div>
+                        <div className='boton'>
+                            <button className='boton-1' onClick={ () => setShowAlertModal(false) }>Aceptar</button>
+                        </div>
+                    </div>
+                </div>
             }
             <div className="empleadosList">
                 <div className="tabla">
