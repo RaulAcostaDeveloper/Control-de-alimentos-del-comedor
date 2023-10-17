@@ -83,7 +83,8 @@ export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmple
                 </div>
                 <div className='input'>
                     <p>¿Tiene acceso?</p>
-                    <select 
+                    <select
+                        className='select-1'
                         name="Acceso"
                         value={ tieneAcceso }
                         onChange={ (event) => setTieneAcceso(event.target.value) }>
@@ -93,7 +94,8 @@ export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmple
                 </div>
                 <div className='input'>
                     <p>Horario</p>
-                    <select 
+                    <select
+                        className='select-1'
                         name="Acceso"
                         value={ proximoHorario }
                         onChange={ (event) => setProximoHorario(event.target.value) }>

@@ -8,9 +8,7 @@ type Empleado = {
     tieneAcceso: boolean;
     proximoHorario: number,
 }
-type Props = {
-    filter?: string;
-}
+
 
 export const empleados: Empleado[] = [
     {
@@ -101,22 +99,23 @@ const filtraPorId = (filtro: string) => {
 const eliminarEmpleado = (index:  number) =>  {
     empleados.splice(index, 1);
 }
-export const EmpleadosList = ({ filter } :Props): JSX.Element => {
+export const EmpleadosList = (): JSX.Element => {
     const [ empleadosLista, setEmpleadosLista ] = useState(empleados);
     const [ showAniadirEmpleado, setShowAniadirEmpleado ] = useState(false);
     const [ showEliminarEmpleado, setShowEliminarEmpleado ] = useState(false);
     const [ idEliminar,  setIdEliminar ] = useState('');
     const [ showAlertModal, setShowAlertModal] = useState(false);
     const [ textAlertModal, setTextAlertModal ] = useState('');
+    const [ filtroNombre, setFiltroNombre ] = useState('');
 
     useEffect(()=> {
-        if (filter) {
-            const arr = filtraPorNombre(filter);
+        if (filtroNombre) {
+            const arr = filtraPorNombre(filtroNombre);
             setEmpleadosLista(arr)
         } else {
             setEmpleadosLista(empleados);
         }
-    },[filter]);
+    },[filtroNombre]);
 
     const handleAniadirEmpleado = (newEmpleado: Empleado) => {
         const objFiltrado = filtraPorId(newEmpleado.Id_Empleado);
@@ -151,9 +150,17 @@ export const EmpleadosList = ({ filter } :Props): JSX.Element => {
     return (
         <>
             <div className='cuadroDeAcciones'>
-                <p>Acciones</p>
                 <button className="boton-1" onClick={ () => setShowAniadirEmpleado(true) }>Añadir empleado</button>
                 <button className="boton-1" onClick={ () => setShowEliminarEmpleado(true) }>Eliminar empleado</button>
+            </div>
+            <div className='filtro'>
+                <input
+                    className='input-2'
+                    type="text" 
+                    placeholder='Filtro por nombre'
+                    value={ filtroNombre }
+                    onChange={ (event) => setFiltroNombre(event.target.value) }
+                    />
             </div>
             { showAniadirEmpleado && 
                 <ModalAniadirEmpleado

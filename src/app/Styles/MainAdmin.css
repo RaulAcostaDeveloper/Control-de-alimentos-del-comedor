@@ -5,7 +5,6 @@
         justify-content: center;
     }
     .listaEmpleados{
-        margin-top: 30px;
         .filtro{
             width: 100%;
             display: flex;
