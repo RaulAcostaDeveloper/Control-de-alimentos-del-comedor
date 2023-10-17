@@ -8,14 +8,14 @@ button{
 .tituloApp{
     width: 100%;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 60px;
     font-size: 12px;
     color: rgb(49, 49, 49);
 }
 .tituloMain {
     width: 100%;
     text-align: center;
-    margin-top: 40px;
+    margin-top: 50px;
     font-size: 12px;
     margin-bottom: 40px;
 }
@@ -54,7 +54,7 @@ button{
 }
 .boton-flotante{
     position: fixed;
-    top: 70px;
+    top: 5px;
     right: 20px;
     transition: 0.2s;
 }
@@ -68,12 +68,19 @@ button{
 }
 @media only screen and (min-width: 762px) {
     .tituloApp{
+        margin-top: 20px;
         font-size: 18px;
     }
     .tituloMain {
         font-size: 18px;
     }
     .boton-flotante{
-        top: 20px;
+        top: 60px;
+    }
+
+}
+@media only screen and (min-width: 1024px) {
+    .boton-flotante{
+        top: 0px;
     }
 }
