@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import '../Styles/MainEmpleado.css';
 import '../Styles/Modales.css';
 import { empleados } from './EmpleadosList';
-import { CandyContainer, getUltimaColumna, openACandyModal, reiniciaPosicionInicial } from './Candys/CandyContainer';
+import { CandyContainer, getUltimaColumna, openACandyModal, reiniciaPosicionInicial, setActualPosicion } from './Candys/CandyContainer';
 import { Candy } from './Candys/Candy';
 
 const getPosicionUsuario = (idEmpleado: string) => {
@@ -51,6 +51,7 @@ export const MainEmpleado = ({ openLogin }: Props): JSX.Element => {
             return 0;
         }
     }
+
     const handleSolicitarAcceso = () => {
         const posicionUsuario = getPosicionUsuario(idEmpleadoValue);
         let opcion = obtenerOptionModal(posicionUsuario);
@@ -92,12 +93,19 @@ export const MainEmpleado = ({ openLogin }: Props): JSX.Element => {
     }
 
     const handleClodeModal  = () => {
-        reiniciaPosicionInicial();
+        // reiniciaPosicionInicial();
+        setActualPosicion({ columna: 2, fila: 1})
         setShowModalEmpleado(false);
     }
+    
+    useEffect(()=>{
+        setActualPosicion({ columna: 2, fila: 1});
+    },[]);
+
     useEffect(()=>{
         idEmpleadoValue = idEmpleado;
-    },[idEmpleado])
+    },[idEmpleado]);
+
     return (
         <CandyContainer>
             <div className="mainEmpleado">
