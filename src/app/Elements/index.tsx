@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
-import '../Styles/Global.css'
+import '../Styles/Global.css';
+import '../Styles/Candys.css';
 import { Login } from "./Login"
 import { MainAdmin } from './MainAdmin'
 import { MainEmpleado } from './MainEmpleado'
