@@ -161,6 +161,12 @@ export const CandyContainer = ({children, className, id}: Props): JSX.Element =>
 
     useEffect(() => {
         // Al renderizar
+        // Evita el presionado de la tecla tab
+        document.addEventListener("keydown", function(event) {             
+            if (event.keyCode == 9) {
+                event.preventDefault();
+            }
+          });
         document.addEventListener('keyup', handleKeyUp);
         return () => {
             // En el desmontado
