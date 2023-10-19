@@ -1,4 +1,6 @@
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
+import { Candy } from './Candys/Candy';
+import { setActualPosicion } from './Candys/CandyContainer';
 
 type Props = {
     setShowAniadirEmpleado: (...args: any[]) => void;
@@ -11,6 +13,10 @@ type Empleado = {
     tieneAcceso: boolean;
     proximoHorario: number,
 }
+let idForm = '';
+let nombreForm = '';
+let tieneAccesoForm = '';
+let proximoHorarioForm = '';
 export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmpleado }: Props): JSX.Element => {
     const [ showAlert,  setShowAlert ] = useState(false);
     const [ mensajeAlert,  setMensajeAlert ] = useState('');
@@ -20,37 +26,56 @@ export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmple
     const [ tieneAcceso, setTieneAcceso ] = useState('false');
     const [ proximoHorario, setProximoHorario ] = useState('7');
 
+    useEffect(()=>{
+        idForm = Id_Empleado;
+        nombreForm = nombre;
+        tieneAccesoForm = tieneAcceso;
+        proximoHorarioForm = proximoHorario;
+    },[Id_Empleado, nombre, tieneAcceso, proximoHorario]);
+
     const handleAceptar  = () => {
 
-        if (Id_Empleado.length === 4) {
-            if (nombre.length > 4) {
-                if (tieneAcceso === "true" || tieneAcceso === "false") {
-                    if (proximoHorario === "7" || proximoHorario === "14") {
+        if (idForm.length === 4) {
+            if (nombreForm.length > 4) {
+                if (tieneAccesoForm === "true" || tieneAccesoForm === "false") {
+                    if (proximoHorarioForm === "7" || proximoHorarioForm === "14") {
                         const newEmpleado = {      
-                            Id_Empleado: Id_Empleado,
-                            nombre: nombre,
-                            tieneAcceso: tieneAcceso === "true", // true o false booleano
-                            proximoHorario: Number (proximoHorario),
-                        };                        
+                            Id_Empleado: idForm,
+                            nombre: nombreForm,
+                            tieneAcceso: tieneAccesoForm === "true", // true o false booleano
+                            proximoHorario: Number (proximoHorarioForm),
+                        };
                         handleAniadirEmpleado(newEmpleado);
-                        setShowAniadirEmpleado(false);
                     } else {
                         setShowAlert(true);
-                        setMensajeAlert('Error en horario');                        
+                        setMensajeAlert('Error en horario');
+                        setActualPosicion({ columna: 11, fila:  1} );
                     }
                 } else {
                     setShowAlert(true);
-                    setMensajeAlert('Error en acceso');                    
+                    setMensajeAlert('Error en acceso');
+                    setActualPosicion({ columna: 11, fila:  1} );
                 }
             } else {
                 setShowAlert(true);
-                setMensajeAlert('Error en nombre');                
+                setMensajeAlert('Error en nombre');
+                setActualPosicion({ columna: 11, fila:  1} );
             }
         } else {
             setShowAlert(true);
-            setMensajeAlert('Error en id');            
+            setMensajeAlert('Error en id');
+            setActualPosicion({ columna: 11, fila:  1} );
         }
                 
+    }
+    const handleCloseModal = () => {
+        setActualPosicion({ columna: 4, fila:  1} );
+        setShowAniadirEmpleado(false);
+    }
+    const handleCloseAlertModal = () => {
+        setActualPosicion({ columna: 7, fila:  1} );
+        setShowAlert(false);
+
     }
     return (
         <>
@@ -60,30 +85,43 @@ export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmple
                     <h3>Añadir empleado</h3>
                 </div>
                 <div className='input'>
-                    <input 
-                        type="text" 
-                        placeholder='Id_Empleado' 
-                        className='input-1'
-                        autoComplete="off"
-                        minLength={4}
-                        maxLength={4}
-                        value={ Id_Empleado }
-                        onChange={ (event) => setId_Empleado(event.target.value) }/>
+                    <Candy
+                        posicion={ [7,1] }
+                        className='CandyContainer'
+                        idInput='input_aniadirEmpleado-id'>
+                        <input
+                            id='input_aniadirEmpleado-id'
+                            type="text"
+                            placeholder='Id_Empleado'
+                            className='input-1'
+                            autoComplete="off"
+                            minLength={ 4 }
+                            maxLength={ 4 }
+                            value={ Id_Empleado }
+                            onChange={ (event) => setId_Empleado(event.target.value) }/>
+                    </Candy>
                 </div>
                 <div className='input'>
-                    <input 
-                        type="text" 
-                        placeholder='Nombre' 
-                        className='input-1'
-                        autoComplete="off"
-                        minLength={4}
-                        maxLength={32}
-                        value={ nombre }
-                        onChange={ (event) => setNombre(event.target.value) }/>
+                    <Candy
+                        posicion={ [8,1] }
+                        className='CandyContainer'
+                        idInput='input_aniadirEmpleado-nombre'>
+                        <input
+                            id='input_aniadirEmpleado-nombre'
+                            type="text"
+                            placeholder='Nombre'
+                            className='input-1'
+                            autoComplete="off"
+                            minLength={ 4 }
+                            maxLength={ 32 }
+                            value={ nombre }
+                            onChange={ (event) => setNombre(event.target.value) }/>
+                    </Candy>
                 </div>
                 <div className='input'>
                     <p>¿Tiene acceso?</p>
                     <select
+                        id='select_aniadirEmpleado-acceso'
                         className='select-1'
                         name="Acceso"
                         value={ tieneAcceso }
@@ -104,10 +142,18 @@ export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmple
                     </select>
                 </div>
                 <div className='boton'>
-                    <button className='boton-1' onClick={ ()=> handleAceptar() }>Aceptar</button>
+                    <Candy
+                        posicion={ [9,1] }
+                        onEnter={ handleAceptar }>
+                        <button className='boton-1' onClick={ ()=> handleAceptar() }>Aceptar</button>
+                    </Candy>
                 </div>
                 <div className='boton'>
-                    <button className='boton-1' onClick={ ()=> setShowAniadirEmpleado(false) }>Cerrar</button>
+                    <Candy
+                        posicion={ [10,1] }
+                        onEnter={ handleCloseModal }>
+                        <button className='boton-1' onClick={ ()=> handleCloseModal() }>Cerrar</button>
+                    </Candy>
                 </div>
             </div>
         </div>
@@ -118,7 +164,11 @@ export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmple
                     <h3>{mensajeAlert}</h3>
                 </div>
                 <div className='boton'>
-                    <button className='boton-1' onClick={ ()=> setShowAlert(false) }>Aceptar</button>
+                    <Candy
+                        posicion={ [11,1] }
+                        onEnter={ handleCloseAlertModal }>
+                        <button className='boton-1' onClick={ ()=> handleCloseAlertModal() }>Aceptar</button>
+                    </Candy>
                 </div>
             </div>
         </div>

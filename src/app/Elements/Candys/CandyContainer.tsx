@@ -28,8 +28,10 @@ export const setIsKeyListenerActive = (toggle: boolean): void => {
     }, 10);
 }
 export const setActualPosicion = (nuevaPosicionActual: Posicion): void => {
-    actualPosicion = nuevaPosicionActual;
-    simulaRenderizado();
+    setTimeout(() => {
+        actualPosicion = nuevaPosicionActual;
+        simulaRenderizado();
+    }, 10);
 }
 // CUADRICULA 
 export const aniadePosicionACuadricula = (nuevaColumna: number, nuevaFila: number): void => {

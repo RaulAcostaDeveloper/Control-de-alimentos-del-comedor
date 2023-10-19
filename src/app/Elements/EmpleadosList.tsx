@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import '../Styles/EmpleadosList.css';
 import { ModalAniadirEmpleado } from './ModalAniadirEmpleado';
+import { Candy } from './Candys/Candy';
+import { setActualPosicion } from './Candys/CandyContainer';
 
 type Empleado = {
     Id_Empleado: string;
@@ -99,6 +101,7 @@ const filtraPorId = (filtro: string) => {
 const eliminarEmpleado = (index:  number) =>  {
     empleados.splice(index, 1);
 }
+let idEliminarForm  = '';
 export const EmpleadosList = (): JSX.Element => {
     const [ empleadosLista, setEmpleadosLista ] = useState(empleados);
     const [ showAniadirEmpleado, setShowAniadirEmpleado ] = useState(false);
@@ -109,6 +112,10 @@ export const EmpleadosList = (): JSX.Element => {
     const [ filtroNombre, setFiltroNombre ] = useState('');
 
     useEffect(()=> {
+        idEliminarForm = idEliminar;
+    } ,[idEliminar]);
+
+    useEffect(()=> {
         if (filtroNombre) {
             const arr = filtraPorNombre(filtroNombre);
             setEmpleadosLista(arr)
@@ -117,50 +124,91 @@ export const EmpleadosList = (): JSX.Element => {
         }
     },[filtroNombre]);
 
+    const handleOpenModalAniadirEmpleado = () => {
+        setActualPosicion({ columna: 7, fila: 1} )
+        setShowAniadirEmpleado(true);
+    }
+
     const handleAniadirEmpleado = (newEmpleado: Empleado) => {
         const objFiltrado = filtraPorId(newEmpleado.Id_Empleado);
         if (objFiltrado.empleadosFiltrados.length ===  0) {
             aniadirEmpleado(newEmpleado);
             const obj = empleados.map((el)=>el);
             setEmpleadosLista(obj);
+            setActualPosicion({ columna: 4, fila:  1} );
+            setShowAniadirEmpleado(false);
         } else {
+            setActualPosicion({ columna: 12, fila:  1} );
             setShowAlertModal(true);
             setTextAlertModal('Ya existe el empleado')
         }
     }
 
     const handleEliminarEmpleado = () =>  {
-        if (idEliminar.length === 4) {
-            const empleadoAEliminar  =  filtraPorId(idEliminar);
-            console.log('empleadoAEliminar ',  empleadoAEliminar);
-            
+        if (idEliminarForm.length === 4) {
+            const empleadoAEliminar  =  filtraPorId(idEliminarForm);            
             if (empleadoAEliminar.empleadosFiltrados.length > 0) {
                 eliminarEmpleado(empleadoAEliminar.indice);
                 setIdEliminar('');
-                setShowEliminarEmpleado(false); 
                 setShowAlertModal(true);
                 setTextAlertModal('Se eliminó al empleado ' + empleadoAEliminar.empleadosFiltrados[0].nombre); 
             }  else  {
                 setShowAlertModal(true);
-                setTextAlertModal('No se encontró el empleado con  el id ' + idEliminar);           
+                setTextAlertModal('No se encontró el empleado con  el id ' + idEliminarForm);           
             }
+            setActualPosicion({ columna: 12, fila:  1} );
         }
+    }
+
+    const handleCloseAlertModal = () => {
+        if (showAniadirEmpleado || showEliminarEmpleado) {
+            if (showAniadirEmpleado) {
+                setActualPosicion({ columna: 7, fila:  1} );
+            }
+            if (showEliminarEmpleado) {
+                setActualPosicion({ columna: 13, fila:  1} );
+            }
+        } else {
+            handleCloseModalEliminarEmpleado();
+        }
+        setShowAlertModal(false);
+    }
+
+    const handleOpenModalEliminarEmpleado = () => {
+        setActualPosicion({ columna: 13, fila:  1} );
+        setShowEliminarEmpleado(true);
+    }
+    const handleCloseModalEliminarEmpleado = () => {
+        setActualPosicion({ columna: 5, fila:  1} );
+        setShowEliminarEmpleado(false);
     }
 
     return (
         <>
             <div className='cuadroDeAcciones'>
-                <button className="boton-1" onClick={ () => setShowAniadirEmpleado(true) }>Añadir empleado</button>
-                <button className="boton-1" onClick={ () => setShowEliminarEmpleado(true) }>Eliminar empleado</button>
+                <Candy
+                    posicion={ [4,1] }
+                    onEnter={ handleOpenModalAniadirEmpleado }>
+                    <button className="boton-1" onClick={ () => handleOpenModalAniadirEmpleado() }>Añadir empleado</button>
+                </Candy>
+                <Candy
+                    posicion={ [5,1] }
+                    onEnter={ handleOpenModalEliminarEmpleado }>
+                    <button className="boton-1" onClick={ () => handleOpenModalEliminarEmpleado() }>Eliminar empleado</button>
+                </Candy>
             </div>
             <div className='filtro'>
-                <input
-                    className='input-2'
-                    type="text" 
-                    placeholder='Filtro por nombre'
-                    value={ filtroNombre }
-                    onChange={ (event) => setFiltroNombre(event.target.value) }
-                    />
+                <Candy
+                    posicion={ [6,1] }
+                    idInput='input_empleados-filtro'>
+                    <input
+                        id='input_empleados-filtro'
+                        className='input-2'
+                        type="text" 
+                        placeholder='Filtro por nombre'
+                        value={ filtroNombre }
+                        onChange={ (event) => setFiltroNombre(event.target.value) }/>
+                </Candy>
             </div>
             { showAniadirEmpleado && 
                 <ModalAniadirEmpleado
@@ -174,21 +222,35 @@ export const EmpleadosList = (): JSX.Element => {
                             <h3>Eliminar  empleado</h3>
                         </div>
                         <div className='input'>
-                            <input 
-                                type="text" 
-                                placeholder='Id_Empleado a eliminar' 
-                                className='input-1'
-                                autoComplete="off"
-                                minLength={4}
-                                maxLength={4}
-                                value={ idEliminar }
-                                onChange={ (event) => setIdEliminar(event.target.value) }/>
+                            <Candy
+                                posicion={ [13,1] }
+                                idInput='input_eliminarEmpleado-id'
+                                className='CandyContainer'>
+                                <input
+                                    id='input_eliminarEmpleado-id'
+                                    type="text" 
+                                    placeholder='Id_Empleado a eliminar' 
+                                    className='input-1'
+                                    autoComplete="off"
+                                    minLength={4}
+                                    maxLength={4}
+                                    value={ idEliminar }
+                                    onChange={ (event) => setIdEliminar(event.target.value) }/>
+                            </Candy>
                         </div>
                         <div className='boton'>
-                            <button className='boton-1' onClick={ () => handleEliminarEmpleado() }>Aceptar</button>
+                            <Candy
+                                posicion={ [14,1] }
+                                onEnter={ handleEliminarEmpleado }>
+                                <button className='boton-1' onClick={ () => handleEliminarEmpleado() }>Aceptar</button>
+                            </Candy>
                         </div>
                         <div className='boton'>
-                            <button className='boton-1' onClick={ () => setShowEliminarEmpleado(false) }>Cancelar</button>
+                            <Candy
+                                posicion={ [15,1] }
+                                onEnter={ handleCloseModalEliminarEmpleado }>
+                                <button className='boton-1' onClick={ () => handleCloseModalEliminarEmpleado() }>Cancelar</button>
+                            </Candy>
                         </div>
                     </div>
                 </div>
@@ -200,7 +262,11 @@ export const EmpleadosList = (): JSX.Element => {
                             <h3>{textAlertModal}</h3>
                         </div>
                         <div className='boton'>
-                            <button className='boton-1' onClick={ () => setShowAlertModal(false) }>Aceptar</button>
+                            <Candy
+                                posicion={ [12, 1] }
+                                onEnter={ handleCloseAlertModal }>
+                                <button className='boton-1' onClick={ () => handleCloseAlertModal() }>Aceptar</button>
+                            </Candy>
                         </div>
                     </div>
                 </div>
