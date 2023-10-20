@@ -123,9 +123,6 @@ export const Candy = ({ className, id, children, onEnter, onSpace, idInput, posi
         isThisCandyOnInput = false;
         setIsKeyListenerActive(true);
         setActualPosicion({ columna: posicion[0], fila: posicion[1] });
-        if (onEnter) {
-            onEnter();
-        }
         if (idInput) { 
             entrarAlInput();
             inputActual = idInput;

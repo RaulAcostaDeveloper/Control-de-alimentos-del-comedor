@@ -2,11 +2,9 @@ type Props = {
     openLogin:(...args: any[]) => void;
 }
 import { useEffect, useState } from 'react';
-import '../Styles/MainEmpleado.css';
-import '../Styles/Modales.css';
-import { empleados } from './EmpleadosList';
-import { CandyContainer, getUltimaColumna, openACandyModal, reiniciaPosicionInicial, setActualPosicion } from './Candys/CandyContainer';
-import { Candy } from './Candys/Candy';
+import { empleados } from '@/app/Constants/CrudEmpleados';
+import { CandyContainer, getUltimaColumna, openACandyModal, setActualPosicion } from '../Candys/CandyContainer';
+import { Candy } from '../Candys/Candy';
 
 const getPosicionUsuario = (idEmpleado: string) => {
     for (let i = 0; i < empleados.length; i++) {
@@ -36,7 +34,6 @@ export const MainEmpleado = ({ openLogin }: Props): JSX.Element => {
                 const horarioSalida = horarioEntrada + 2;
                 if (horaActual >= horarioEntrada && horaActual < horarioSalida) {
                     // Acceso
-                    console.log('está en el horario');
                     return 1;
                 } else {
                     // No está en el horario
@@ -93,7 +90,6 @@ export const MainEmpleado = ({ openLogin }: Props): JSX.Element => {
     }
 
     const handleClodeModal  = () => {
-        // reiniciaPosicionInicial();
         setActualPosicion({ columna: 2, fila: 1})
         setShowModalEmpleado(false);
     }

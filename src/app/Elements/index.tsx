@@ -1,10 +1,14 @@
 'use client'
 import { useState } from 'react'
-import '../Styles/Global.css';
 import '../Styles/Candys.css';
+import '../Styles/EmpleadosList.css';
+import '../Styles/Global.css';
+import '../Styles/MainAdmin.css';
+import '../Styles/MainEmpleado.css';
+import '../Styles/Modales.css';
 import { Login } from "./Login"
-import { MainAdmin } from './MainAdmin'
-import { MainEmpleado } from './MainEmpleado'
+import { MainAdmin } from './Admin/MainAdmin'
+import { MainEmpleado } from './Empleado/MainEmpleado'
 
 export const Index = (): JSX.Element => {
     const [ showLogin, setShowLogin ] = useState(true);

@@ -1,10 +1,11 @@
 import {  useEffect, useState } from 'react';
-import { Candy } from './Candys/Candy';
-import { setActualPosicion } from './Candys/CandyContainer';
+import { Candy } from '../Candys/Candy';
+import { setActualPosicion } from '../Candys/CandyContainer';
+import { SegundoModal } from './SegundoModal';
+import { aniadirEmpleado, filtraPorId } from '@/app/Constants/CrudEmpleados';
 
 type Props = {
-    setShowAniadirEmpleado: (...args: any[]) => void;
-    handleAniadirEmpleado: (...args: any[]) => void;
+    handleCloseModalAniadirEmpleado: (...args: any[]) => void;
 }
 
 type Empleado = {
@@ -17,8 +18,8 @@ let idForm = '';
 let nombreForm = '';
 let tieneAccesoForm = '';
 let proximoHorarioForm = '';
-export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmpleado }: Props): JSX.Element => {
-    const [ showAlert,  setShowAlert ] = useState(false);
+export const ModalAniadirEmpleado = ({ handleCloseModalAniadirEmpleado }: Props): JSX.Element => {
+    const [ showSegundoModal,  setShowSegundoModal ] = useState(false);
     const [ mensajeAlert,  setMensajeAlert ] = useState('');
 
     const [ Id_Empleado, setId_Empleado ] = useState('');
@@ -33,49 +34,47 @@ export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmple
         proximoHorarioForm = proximoHorario;
     },[Id_Empleado, nombre, tieneAcceso, proximoHorario]);
 
-    const handleAceptar  = () => {
+    useEffect(()=>{
+        setActualPosicion({ columna: 7, fila:  1} );
+    },[]);
 
+    const handleAceptar  = () => {
+        setShowSegundoModal(true);
+        // Siempre levanta una alerta
+        setActualPosicion({ columna: 11, fila:  1} );
         if (idForm.length === 4) {
             if (nombreForm.length > 4) {
                 if (tieneAccesoForm === "true" || tieneAccesoForm === "false") {
                     if (proximoHorarioForm === "7" || proximoHorarioForm === "14") {
-                        const newEmpleado = {      
+                        const newEmpleado = {
                             Id_Empleado: idForm,
                             nombre: nombreForm,
                             tieneAcceso: tieneAccesoForm === "true", // true o false booleano
                             proximoHorario: Number (proximoHorarioForm),
                         };
-                        handleAniadirEmpleado(newEmpleado);
-                    } else {
-                        setShowAlert(true);
-                        setMensajeAlert('Error en horario');
-                        setActualPosicion({ columna: 11, fila:  1} );
-                    }
-                } else {
-                    setShowAlert(true);
-                    setMensajeAlert('Error en acceso');
-                    setActualPosicion({ columna: 11, fila:  1} );
-                }
-            } else {
-                setShowAlert(true);
-                setMensajeAlert('Error en nombre');
-                setActualPosicion({ columna: 11, fila:  1} );
-            }
-        } else {
-            setShowAlert(true);
-            setMensajeAlert('Error en id');
-            setActualPosicion({ columna: 11, fila:  1} );
-        }
-                
+                        const objFiltrado = filtraPorId(newEmpleado.Id_Empleado);
+                        if (objFiltrado.empleadosFiltrados.length ===  0) {
+                            aniadirEmpleado(newEmpleado);
+                            setId_Empleado('');
+                            setNombre('');
+                            setTieneAcceso('false');
+                            setProximoHorario('7');
+                            setMensajeAlert('Empleado añadido con éxito');
+
+                        } else { setMensajeAlert('Ya existe el empleado') }
+
+                    } else { setMensajeAlert('Error en horario') }
+
+                } else { setMensajeAlert('Error en acceso') }
+
+            } else { setMensajeAlert('Error en nombre') }
+            
+        } else { setMensajeAlert('Error en id') }
     }
-    const handleCloseModal = () => {
-        setActualPosicion({ columna: 4, fila:  1} );
-        setShowAniadirEmpleado(false);
-    }
+
     const handleCloseAlertModal = () => {
         setActualPosicion({ columna: 7, fila:  1} );
-        setShowAlert(false);
-
+        setShowSegundoModal(false);
     }
     return (
         <>
@@ -151,27 +150,16 @@ export const ModalAniadirEmpleado = ({setShowAniadirEmpleado, handleAniadirEmple
                 <div className='boton'>
                     <Candy
                         posicion={ [10,1] }
-                        onEnter={ handleCloseModal }>
-                        <button className='boton-1' onClick={ ()=> handleCloseModal() }>Cerrar</button>
+                        onEnter={ handleCloseModalAniadirEmpleado }>
+                        <button className='boton-1' onClick={ ()=> handleCloseModalAniadirEmpleado() }>Cerrar</button>
                     </Candy>
                 </div>
             </div>
         </div>
-        { showAlert && 
-            <div className='containerModal'>
-            <div className='innerModal'>
-                <div className='titulo'>
-                    <h3>{mensajeAlert}</h3>
-                </div>
-                <div className='boton'>
-                    <Candy
-                        posicion={ [11,1] }
-                        onEnter={ handleCloseAlertModal }>
-                        <button className='boton-1' onClick={ ()=> handleCloseAlertModal() }>Aceptar</button>
-                    </Candy>
-                </div>
-            </div>
-        </div>
+        { showSegundoModal && 
+            <SegundoModal
+                textSegundoModal={ mensajeAlert }
+                handleCloseSegundoModal = { () => handleCloseAlertModal() }/>
         }
         </>
     )

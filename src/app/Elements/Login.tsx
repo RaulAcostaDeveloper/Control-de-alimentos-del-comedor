@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import '../Styles/Modales.css';
 import { CandyContainer, getUltimaColumna, openACandyModal, reiniciaPosicionInicial } from './Candys/CandyContainer';
 import { Candy } from './Candys/Candy';
 type Props = {
