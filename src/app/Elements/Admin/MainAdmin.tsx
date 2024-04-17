@@ -7,9 +7,9 @@ import { Candy } from '../Candys/Candy';
 import { AccionesAdmin } from './AccionesAdmin';
 export const MainAdmin = ({ openLogin } :Props): JSX.Element => {
     const [ showList, setShowList ] = useState(false);
-    useEffect(()=>{
-        setActualPosicion({ columna: 2, fila: 1 });
-    },[]);
+    // useEffect(()=>{
+    //     setActualPosicion({ columna: 3, fila: 1 });
+    // },[]);
 
     return (
         <CandyContainer>

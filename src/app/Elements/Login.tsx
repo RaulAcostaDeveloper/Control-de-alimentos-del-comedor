@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CandyContainer, getUltimaColumna, openACandyModal, reiniciaPosicionInicial } from './Candys/CandyContainer';
+import { CandyContainer, getUltimaColumna, openACandyModal, reiniciaPosicionInicial, setActualPosicion } from './Candys/CandyContainer';
 import { Candy } from './Candys/Candy';
 type Props = {
     handleLogin:(...args: any[]) => void;
@@ -24,19 +24,19 @@ export const Login = ({ handleLogin }: Props): JSX.Element => {
         setInputUsuarioValue('');
         setInputPasswordValue('');
         if (adminInput === adminUserName && passwordInput === adminUserPassword) {
-            reiniciaPosicionInicial();
+            setActualPosicion({columna:1,fila:1});
             handleLogin(true);
         } else {
-            openACandyModal(getUltimaColumna());
+            setActualPosicion({columna:7,fila:1});
             setShowModalInfo(true);
         }
     }
     const handleCloseModalInfo = () => {
-        reiniciaPosicionInicial();
+        setActualPosicion({columna:3,fila:1});
         setShowModalInfo(false);
     }
     const handleLogEmpleado = () => {
-        reiniciaPosicionInicial();
+        setActualPosicion({columna:1,fila:1});
         handleLogin(false);
     }
     return (
@@ -51,7 +51,7 @@ export const Login = ({ handleLogin }: Props): JSX.Element => {
                     <div className='input'>
                         <Candy
                             className='CandyContainer'
-                            posicion={[1,1]}
+                            posicion={[3,1]}
                             idInput='input_login-usuario'>
                             <input 
                                 id='input_login-usuario'
@@ -66,7 +66,7 @@ export const Login = ({ handleLogin }: Props): JSX.Element => {
                     <div className='input'>
                         <Candy
                             className='CandyContainer'
-                            posicion={[2,1]}
+                            posicion={[4,1]}
                             idInput='input_login-password'>
                             <input
                                 id='input_login-password'
@@ -81,7 +81,7 @@ export const Login = ({ handleLogin }: Props): JSX.Element => {
                     <div className='boton'>
                         <Candy
                             className='CandyContainer'
-                            posicion={[3,1]}
+                            posicion={[5,1]}
                             onEnter={ () => handleTryLogin() }>
                             <button className='boton-1' onClick={ () => handleTryLogin() }>Ingresar</button>
                         </Candy>
@@ -91,7 +91,7 @@ export const Login = ({ handleLogin }: Props): JSX.Element => {
                         <p className='adminq'>¿No eres administrador?</p>
                         <Candy
                             className='CandyContainer'
-                            posicion={[4,1]}
+                            posicion={[6,1]}
                             onEnter={ () => handleLogEmpleado() }>
                             <button className='boton-1' onClick={ () => handleLogEmpleado() }>Soy empleado</button>
                         </Candy>
@@ -111,7 +111,7 @@ export const Login = ({ handleLogin }: Props): JSX.Element => {
                         <div className='boton'>
                         <Candy
                             className='CandyContainer'
-                            posicion={[5,1]}
+                            posicion={[7,1]}
                             onEnter={ ()=> handleCloseModalInfo() }>
                             <button className='boton-1' onClick={ ()=> handleCloseModalInfo() }>Aceptar</button>
                         </Candy>

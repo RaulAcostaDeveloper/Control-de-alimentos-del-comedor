@@ -1,0 +1,40 @@
+.advice-box-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.advice-box {
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  width: 250px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+  
+.advice-box p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+.buttons button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buttons button:disabled {
+  background-color: #ccc;
+}
